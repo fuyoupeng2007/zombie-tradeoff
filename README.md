@@ -1,5 +1,7 @@
 # 🧟 Zombie Tradeoff · Endless Survival
 
+> **"Loot left, fight right — you can't do both forever."**
+
 A 2D endless-survival web game where **weapons drop on the left and zombies swarm from the right** — grab the upgrade and you stop shooting; hold the line and you miss the loot. That's the tradeoff.
 
 ## 🎮 Gameplay
