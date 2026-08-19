@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0b1026">
-<title>🧟 打僵尸 · 取舍之战</title>
+<title>🧟 Zombie Tradeoff · Endless Survival</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html,body { width:100%; height:100%; overflow:hidden; background:#1d1a12;
     font-family:'Segoe UI','Microsoft YaHei',system-ui,sans-serif; user-select:none;
     -webkit-tap-highlight-color:transparent; }
-  /* 大屏横屏：全屏游戏，像电脑游戏一样 */
+  /* Fullscreen widescreen game */
   canvas { display:block; width:100%; height:100%; }
   #overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
     background:rgba(16,14,8,.66); backdrop-filter:blur(4px); z-index:10; }
-  .panel { text-align:center; color:#f2ecdc; max-width:680px; padding:0 24px; }
+  .panel { text-align:center; color:#f2ecdc; max-width:720px; padding:0 24px; }
   .panel h1 { font-size:40px; letter-spacing:2px; margin-bottom:6px;
     text-shadow:0 0 18px rgba(255,210,90,.5), 0 3px 0 rgba(0,0,0,.45); }
   .panel h1 .z { color:#e9bf16; }
@@ -41,29 +41,29 @@
 </head>
 <body>
 <canvas id="game"></canvas>
-<button class="mute" id="muteBtn" title="声音开关">🔊</button>
+<button class="mute" id="muteBtn" title="Toggle sound">🔊</button>
 
 <div id="overlay">
   <div class="panel" id="startPanel">
-    <h1><span class="z">🧟 打僵尸</span> · 取舍之战</h1>
-    <div class="sub">2D 大屏版 v1.5 · 无尽模式 · 左边捡武器，右边打僵尸</div>
+    <h1><span class="z">🧟 Zombie Tradeoff</span> · Endless Survival</h1>
+    <div class="sub">v1.5 English · Endless mode · Grab weapons on the left, shoot zombies from the right</div>
     <div class="rules">
-      🎮 <b>← → / A D</b> 左右移动人物 · 自动开火（按 <b>空格</b> / <b>左键</b> 三连发）<br>
-      🎁 左边掉 <b class="z">武器卡</b>：攻击 +1、攻速 +1、回血、护盾 —— <b>无上限</b>，一直掉一直变强！<br>
-      💣 稀有道具 <b class="z">清屏弹</b>（全屏清空）/ <b class="z">穿甲弹</b>（贯穿秒杀）——快扛不住时会掉在你脚边！<br>
-      🧟 右边来 <b>僵尸</b>：普通 / 快速 / 装甲 / 巨力 / 巨型坦克，源源不断！<br>
-      ⚠️ <b>巨型僵尸</b> 血超厚、被咬 −2 ❤；僵尸强度<b>永无止境</b>地增长，早晚打不赢！<br>
-      ⏱ 无尽模式：你的成长无上限，僵尸的强度也无上限，看谁先撑不住
+      🎮 <b>← → / A D</b> move left/right · Auto-fire (hold <b>Space</b> or <b>Left Click</b> for triple shot)<br>
+      🎁 Weapon cards drop on the left: <b class="z">DMG +1, ATK SPD +1, Heal, Shield</b> — <b>no cap</b>, keep collecting, keep growing!<br>
+      💣 Rare drops: <b class="z">Nuke</b> (clear the whole screen) / <b class="z">Railgun</b> (piercing beam) — they land at your feet when you're in trouble!<br>
+      🧟 Zombies from the right: Normal / Fast / Armored / Brute / Mega Tank, endless waves!<br>
+      ⚠️ <b>Mega zombies</b> have massive HP and bite for −2 ❤; zombie strength grows <b>forever</b> — eventually you will fall!<br>
+      ⏱ Endless mode: your growth has no cap, and neither does the horde — who breaks first?
     </div>
-    <button class="btn" id="startBtn">开始游戏</button>
+    <button class="btn" id="startBtn">Start Game</button>
   </div>
 
   <div class="panel hidden" id="endPanel">
-    <h1>💀 你被僵尸咬了</h1>
-    <div class="stat">本局得分 <b id="fScore">0</b></div>
-    <div class="stat">历史最高 <b id="fBest">0</b> <span id="fNew" class="newrec hidden">★ 新纪录！</span></div>
-    <div class="stat" style="font-size:14px;color:#8fa0c9">撑了 <b id="fWave" style="font-size:18px;color:#8fa0c9">0</b> 秒</div>
-    <div style="margin-top:22px"><button class="btn again" id="againBtn">再来一局</button></div>
+    <h1>💀 You got bitten</h1>
+    <div class="stat">Score <b id="fScore">0</b></div>
+    <div class="stat">Best <b id="fBest">0</b> <span id="fNew" class="newrec hidden">★ NEW RECORD!</span></div>
+    <div class="stat" style="font-size:14px;color:#8fa0c9">Survived <b id="fWave" style="font-size:18px;color:#8fa0c9">0</b> seconds</div>
+    <div style="margin-top:22px"><button class="btn again" id="againBtn">Play Again</button></div>
   </div>
 </div>
 
@@ -205,23 +205,23 @@ function spawnZombie(){
   zombies.push(z);
 }
 function spawnItem(){
-  // 常规成长卡：无尽模式，攻击/攻速/回血/护盾全部持续掉落
+  // Normal growth cards: endless mode, all drop forever with no cap
   const kinds=[];
-  kinds.push(['攻击+1','dmg'],['攻击+1','dmg']);
-  kinds.push(['攻速+1','rate']);
-  kinds.push(['回血+1','heal']);
-  kinds.push(['护盾','shield']);
+  kinds.push(['DMG+1','dmg'],['DMG+1','dmg']);
+  kinds.push(['SPD+1','rate']);
+  kinds.push(['HEAL','heal']);
+  kinds.push(['SHIELD','shield']);
   let k;
   if(G.time<15 && kinds.length>=2) k = Math.random()<0.7?kinds[0]:kinds[1];
   else k=kinds[Math.floor(Math.random()*kinds.length)];
   items.push({ x:40+Math.random()*Math.max(60,W*0.34), y:-30, vy:70+Math.random()*30,
     sway:Math.random()*6.28, r:20, kind:k, t:0, land:false });
 }
-// 特殊道具独立掉落：💣 清屏弹约 30~35 秒一个，🚀 穿甲弹约 20~25 秒一个
-// 危险时刻计时加速且掉在玩家附近
+// Special drops: 💣 Nuke every ~30-35s, 🚀 Railgun every ~20-25s (independent timers)
+// In danger the countdown speeds up and the item drops near the player
 function spawnSpecial(type){
   const danger = P.hp<=2 || zombies.length>=24 || G.time>60;
-  const sp = type==='nuke'?['💣 清屏','nuke']:['🚀 穿甲','rail'];
+  const sp = type==='nuke'?['💣 NUKE','nuke']:['🚀 RAIL','rail'];
   const sx = danger
     ? Math.max(50, Math.min(W-50, P.x+(Math.random()*280-140)))
     : 40+Math.random()*Math.max(60,W*0.34);
@@ -233,31 +233,31 @@ function applyItem(it){
   if(kind==='nuke'){ doNuke(); return; }
   if(kind==='rail'){ doRail(); return; }
   let msg='';
-  if(kind==='dmg'){ P.dmg++; msg='💥 攻击 +1 → '+P.dmg; }
-  else if(kind==='rate'){ P.fireRate*=0.90; msg='⚡ 攻速 +1 → '+(1/P.fireRate).toFixed(1)+'/秒'; }
-  else if(kind==='heal'){ P.hp=Math.min(P.maxHp,P.hp+1); msg='❤️ 回血 +1'; }
-  else { P.shield=1; msg='🛡 护盾 +1'; }
+  if(kind==='dmg'){ P.dmg++; msg='💥 DMG +1 → '+P.dmg; }
+  else if(kind==='rate'){ P.fireRate*=0.90; msg='⚡ SPD +1 → '+(1/P.fireRate).toFixed(1)+'/s'; }
+  else if(kind==='heal'){ P.hp=Math.min(P.maxHp,P.hp+1); msg='❤️ HEAL +1'; }
+  else { P.shield=1; msg='🛡 SHIELD +1'; }
   addFloat(P.x, P.y-46, msg, IC[kind], 17);
   burst(P.x, P.y-10, 10, '#ffe9a3', 3);
   SFX.catch();
 }
-// 💣 清屏弹：全屏僵尸一波带走
+// 💣 Nuke: wipe out every zombie on screen
 function doNuke(){
   let n=0;
   for(const z of zombies){ if(z.alive){ killZombie(z); n++; } }
   G.shake=0.9;
   for(let i=0;i<40;i++) burst(Math.random()*W, groundY-20-Math.random()*H*0.5, 3, i%2?'#ff8f5d':'#ffd76a', 2.5);
-  addFloat(W/2, H*0.3, '💣 全屏清空 ×'+n, '#ff5d5d', 30);
+  addFloat(W/2, H*0.3, '💣 SCREEN CLEAR ×'+n, '#ff5d5d', 30);
   SFX.nuke();
 }
-// 🚀 穿甲弹：从玩家位置发射一发超高速贯穿光束，穿透整排僵尸
+// 🚀 Railgun: fire an ultra-fast piercing beam that cuts through the whole row
 function doRail(){
-  const a=0; // 水平向右发射
+  const a=0; // fire horizontally to the right
   const dmg=9999;
   bullets.push({x:P.x+30, y:P.y-6, vx:Math.cos(a)*1600, vy:Math.sin(a)*1600,
     dmg, life:1.6, trail:[], pierce:true, hitSet:new Set()});
   G.shake=0.5;
-  addFloat(P.x, P.y-60, '🚀 穿甲弹发射!', '#7ce8ff', 24);
+  addFloat(P.x, P.y-60, '🚀 RAILGUN!', '#7ce8ff', 24);
   SFX.rail();
 }
 
@@ -413,7 +413,7 @@ function update(dt){
     z.ph+=dt*6; z.hit=Math.max(0,z.hit-dt);
     z.x-=z.spd*dt*(z.type==='fast'?1.25:1);
     if(P.inv<=0 && Math.hypot(z.x-P.x,z.y-P.y)<z.r+P.r-4){
-      if(P.shield>0){ P.shield=0; addFloat(P.x,P.y-50,'🛡 护盾抵挡','#7cc4ff',16); }
+      if(P.shield>0){ P.shield=0; addFloat(P.x,P.y-50,'🛡 SHIELD BLOCKED','#7cc4ff',16); }
       else { P.hp-=z.bite; addFloat(P.x,P.y-50,'−'+z.bite+' ❤','#ff6b6b',20); }
       P.inv=0.9; G.shake=0.5; blood(P.x,P.y); killZombie(z,true); SFX.hurt();
       if(P.hp<=0){ gameOver(); return; }
@@ -531,7 +531,7 @@ function draw(){
     ctx.font='700 15px "Segoe UI","Microsoft YaHei",sans-serif';
     ctx.textAlign='center';
     ctx.fillStyle='#aab6d8';
-    ctx.fillText('← 左边捡武器强化 · 右边来僵尸，被咬 −1 ❤ →',W/2,groundY+36);
+    ctx.fillText('← Grab weapons to power up · Zombies from the right, bites cost −1 ❤ →',W/2,groundY+36);
     ctx.globalAlpha=1;
   }
   ctx.restore();
@@ -551,7 +551,7 @@ function drawItem(it){
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(it.kind[1]==='nuke'?'💣':'🚀',0,-7);
     ctx.font='700 11px "Segoe UI","Microsoft YaHei",sans-serif';
-    ctx.fillText(it.kind[1]==='nuke'?'清屏':'穿甲',0,8);
+    ctx.fillText(it.kind[1]==='nuke'?'NUKE':'RAIL',0,8);
     ctx.shadowBlur=0;
     // 脉动光环
     ctx.strokeStyle=col; ctx.globalAlpha=0.4+0.4*Math.sin(it.t*6);
@@ -705,8 +705,8 @@ function drawUI(){
   }
   if(P.shield>0) drawShield(24+P.maxHp*34+8,20,22);
   // 中间战力面板（土黄半透明）：显示当前攻击力和攻速
-  const atkStr='💥 攻击 '+P.dmg;
-  const spdStr='⚡ 攻速 '+(1/P.fireRate).toFixed(1)+'/秒';
+  const atkStr='💥 DMG '+P.dmg;
+  const spdStr='⚡ SPD '+(1/P.fireRate).toFixed(1)+'/s';
   const panelW=Math.max(240, ctx.measureText(atkStr).width+ctx.measureText(spdStr).width+60);
   ctx.fillStyle='rgba(30,26,15,0.6)'; rr(W/2-panelW/2,12,panelW,30,15); ctx.fill();
   ctx.font='700 15px "Segoe UI","Microsoft YaHei",sans-serif';
@@ -718,7 +718,7 @@ function drawUI(){
   ctx.font='700 20px "Segoe UI","Microsoft YaHei",sans-serif';
   ctx.fillStyle='#ffffff'; ctx.fillText('🏆 '+G.score, W-70, 16);
   ctx.font='13px "Segoe UI","Microsoft YaHei",sans-serif';
-  ctx.fillStyle='#8fa0c9'; ctx.fillText('⏱ '+Math.floor(G.time)+'秒 · 最高 '+G.best, W-70, 42);
+  ctx.fillStyle='#8fa0c9'; ctx.fillText('⏱ '+Math.floor(G.time)+'s · Best '+G.best, W-70, 42);
   ctx.restore();
 }
 

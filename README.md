@@ -1,43 +1,50 @@
-# 🧟 打僵尸 · 取舍之战 (Zombie Tradeoff)
+# 🧟 Zombie Tradeoff · Endless Survival
 
-一款 2D 无尽模式的网页打僵尸小游戏：**左边掉武器卡，右边来僵尸**——去捡武器就顾不上打僵尸，这就是取舍。
+A 2D endless-survival web game where **weapons drop on the left and zombies swarm from the right** — grab the upgrade and you stop shooting; hold the line and you miss the loot. That's the tradeoff.
 
-## 🎮 玩法
+## 🎮 Gameplay
 
-- **核心循环**：左边天上掉武器卡（攻击+1、攻速+1、回血、护盾），右边不断涌来僵尸。你需要左右移动，在"捡武器强化"和"防守僵尸"之间做取舍。
-- **无尽模式**：你的成长没有上限（攻击、攻速无限叠加），僵尸的强度也没有上限（血量、速度、数量随存活时间无限增长）——前期碾压，后期被淹没，看你能撑几分钟。
-- **稀有道具**：
-  - 💣 **清屏弹**（约 30~35 秒掉一个）：捡到立即全屏爆炸，清空所有僵尸
-  - 🚀 **穿甲弹**（约 20~25 秒掉一个）：从你的枪口发射贯穿光束，穿透路径上所有僵尸
-  - 危险时刻（残血 / 被围 / 后期）掉落计时加速，且直接掉在你脚边救命
-- **僵尸类型**：普通 / 快速 / 装甲 / 巨力 / 巨型坦克（巨型僵尸血超厚、被咬 −2 ❤）
+- **Core loop**: Weapon cards rain down on the left (DMG +1, ATK SPD +1, Heal, Shield) while zombies pour in from the right. Move left/right and decide: power up, or hold the horde back?
+- **Endless mode**: Your growth has **no cap** (damage and fire rate stack forever), and neither does the horde — HP, speed and spawn rate scale endlessly with survival time. You dominate early, then drown. How long can you last?
+- **Rare items** (independent timers):
+  - 💣 **NUKE** (every ~30–35 s): instant full-screen blast, clears every zombie
+  - 🚀 **RAILGUN** (every ~20–25 s): fires a piercing beam that cuts through every zombie in its path
+  - When you're in danger (low HP / surrounded / late game) the timers speed up **and the item drops right at your feet**
+- **Zombie types**: Normal / Fast / Armored / Brute / Mega Tank (mega zombies have huge HP and bite for −2 ❤)
 
-## 🎮 操作
+## 🎮 Controls
 
-| 按键 | 功能 |
+| Key | Action |
 |---|---|
-| `←` `→` / `A` `D` | 左右移动 |
-| `空格` / 鼠标左键 | 三连发（自动开火常驻） |
-| `Enter` / `空格` | 开始 / 重开 |
+| `←` `→` / `A` `D` | Move left/right |
+| `Space` / Left Click | Triple shot (auto-fire is always on) |
+| `Enter` / `Space` | Start / Restart |
 
-## 🖥 运行
+## 🖥 Run it
 
-直接双击 `打僵尸.html` 用浏览器打开即可，或运行本地服务器：
+Double-click `index.html` (English) or `打僵尸.html` (中文) to play — zero dependencies, no build step. Or serve it:
 
 ```bash
 python -m http.server 8000
-# 然后访问 http://localhost:8000/打僵尸.html
+# → http://localhost:8000/index.html
 ```
 
-也可部署到 GitHub Pages：仓库 Settings → Pages → 选择 main 分支即可在线游玩。
+Play it live on GitHub Pages: **https://fuyoupeng2007.github.io/zombie-tradeoff/**
 
-## 🛠 技术说明
+## 🛠 Tech
 
-- **纯原生 HTML + Canvas 2D + JavaScript**，零依赖、单文件、无需构建
-- Web Audio 实时合成音效（枪声、爆炸、捡卡、波次号角），无外部音频文件
-- 最高分保存在浏览器 localStorage（沙箱/隐私模式下自动降级，不影响运行）
-- 无任何外部资源请求，可完全离线运行
+- **Vanilla HTML + Canvas 2D + JavaScript** — single file, zero dependencies, no build
+- Web Audio synthesized SFX (gunshots, explosions, pickups, wave horns) — no external audio files
+- High score persisted in `localStorage` (gracefully degrades in sandboxed/private mode)
+- No external requests at all — fully playable offline
 
-## 📄 许可
+## 📦 Files
 
-本项目代码可自由使用、修改、分发。
+- `index.html` — English version (GitHub Pages entry)
+- `打僵尸.html` — Chinese version (中文版)
+- `README.md` — this file (English)
+- `README.zh-CN.md` — Chinese documentation (中文说明)
+
+## 📄 License
+
+Free to use, modify and distribute.
