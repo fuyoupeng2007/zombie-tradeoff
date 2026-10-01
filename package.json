@@ -1,0 +1,12 @@
+{
+  "name": "zombie-tradeoff-dead-air",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Offline Canvas 2D survival game with aerial combat and tactical mutations",
+  "scripts": {
+    "build": "node tools/build-entry.mjs --standalone",
+    "test": "node tools/verify.mjs",
+    "serve": "node tools/serve.mjs"
+  },
+  "devDependencies": { "playwright": "1.62.1" }
+}
